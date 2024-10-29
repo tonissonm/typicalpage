@@ -1,6 +1,9 @@
 import './App.css';
+import {Fragment,useEffect,useState} from 'react';
 import MainHeader from './components/MainHeader/MainHeader';
-
+import Login from './components/Login/Login';
+import Home from './components/Home/Home';
+import AuthContext from './store/auth-context';
 function App() {
   const [loggedIn, setLoggedIn] = useState(() => {
     if (JSON.parse(localStorage.getItem('isLoggedUser')) != null) {
@@ -33,13 +36,18 @@ function App() {
     setLoggedIn(false)
   }
   return (
-    <Fragment>
+    <AuthContext.Provider value={
+      {loggedIn:loggedIn,
+        onLogout:logoutHandler
+      }
+    }>
       <MainHeader isAuthenticated={loggedIn}/>
       <main>
         {!loggedIn&&<Login onLogin ={loginHandler}/>}
         {loggedIn && <Home/>}
       </main>
-    </Fragment>
+    </AuthContext.Provider>
+    
   );
 }
 
